@@ -8,18 +8,18 @@ hash_key = key_provider.hash_key
 key = sys.argv[1]
 message = sys.argv[2]
 
-def sign(key, message):
+def main():
     C = AES.new(key, AES.MODE_ECB)
     enc = C.encrypt(message).encode('hex')
     for i in range(0, len(key)):
         if key[i] != secret_key[i]:
-            return "Key is invalid!"
+            return sys.stderr.write("Key is invalid!")
         # NIST approved 128-bit salt and 100,000 iterations
-        output = hashlib.pbkdf2_hmac('sha512', enc, hash_key, 100000)
+        signed_message = hashlib.pbkdf2_hmac('sha512', enc, hash_key, 100000)
 
-    return "Signed Message:", binascii.hexlify(output)
+    sys.stdout.write(str(binascii.hexlify(signed_message)))
 
-print sign(key, message)
+main()
 
 ###############################################################
 

@@ -6,3 +6,4 @@ message = "*authentic__msg*"
 cmd = "python sign.py " + key + " " + message
 
 os.system(cmd)
+print

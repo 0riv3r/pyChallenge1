@@ -1,16 +1,31 @@
+# import time
+# import sys
+#
+# progress_1 = 'Process 1: {}%'
+# progress_2 = 'Process 2: {}%'
+# print
+# print
+#
+# for i in range(100):
+#     sys.stdout.write('\033[F')
+#     sys.stdout.write('\033[F')
+#     print(progress_1.format(i))
+#     print(progress_2.format(i))
+#     time.sleep(0.02)
+from termcolor import colored, cprint
+from tqdm import tqdm
+import time
 
 
-key_array = list("0fffffffffffffffffffffffffffffff")
-key_array = list("00000000000000000000000000000000")
+pbar = tqdm(["a", "b", "c", "d"])
+for char in pbar:
+    time.sleep(1)
 
-for i in range(0, len(key_array)):
-    print ''.join(key_array)
-    key_array[i] = "1"
-    print ''.join(key_array)
+    text = colored(char, 'red', attrs=['reverse', 'blink'])
 
-    d = int(key_array[i], 16)
-    for j in range(0, 14):
-        d += 1
-        key_array[i] = hex(d).lstrip("0x1")
-        print ''.join(key_array)
+    pbar.set_description(" %s " % text)
 
+# with tqdm(total=100) as pbar:
+#     for i in range(10):
+#         time.sleep(0.1)
+#         pbar.update(10)
