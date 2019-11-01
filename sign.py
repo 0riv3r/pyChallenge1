@@ -1,16 +1,18 @@
-import sys, base64, binascii, hashlib
+import sys, binascii, hashlib
 from Crypto.Cipher import AES
-from Crypto import Random
 import key_provider
+
 secret_key = key_provider.enc_key
 hash_key = key_provider.hash_key
 
 key = sys.argv[1]
 message = sys.argv[2]
 
+
 def main():
-    C = AES.new(key, AES.MODE_ECB)
-    enc = C.encrypt(message).encode('hex')
+    signed_message = None
+    cipher = AES.new(key, AES.MODE_ECB)
+    enc = cipher.encrypt(message).encode('hex')
     for i in range(0, len(key)):
         if key[i] != secret_key[i]:
             return sys.stderr.write("Key is invalid!")
@@ -18,6 +20,7 @@ def main():
         signed_message = hashlib.pbkdf2_hmac('sha512', enc, hash_key, 100000)
 
     sys.stdout.write(str(binascii.hexlify(signed_message)))
+
 
 main()
 
@@ -36,6 +39,3 @@ main()
 # sudo apt install python-setuptools
 # sudo apt install python-pip
 # pip install pycrypto
-
-
-
