@@ -2,8 +2,8 @@ import sys, binascii, hashlib
 from Crypto.Cipher import AES
 import key_provider
 
-secret_key = key_provider.enc_key
-hash_key = key_provider.hash_key
+SECRET_KEY = key_provider.enc_key
+HASH_KEY = key_provider.hash_key
 
 key = sys.argv[1]
 message = sys.argv[2]
@@ -14,10 +14,10 @@ def main():
     cipher = AES.new(key, AES.MODE_ECB)
     enc = cipher.encrypt(message).encode('hex')
     for i in range(0, len(key)):
-        if key[i] != secret_key[i]:
+        if key[i] != SECRET_KEY[i]:
             return sys.stderr.write("Key is invalid!")
-        # NIST approved 128-bit salt and 100,000 iterations
-        signed_message = hashlib.pbkdf2_hmac('sha512', enc, hash_key, 100000)
+        # Comply with NIST requirements - 128-bit key and 100,000 iterations
+        signed_message = hashlib.pbkdf2_hmac('sha512', enc, HASH_KEY, 100000)
 
     sys.stdout.write(str(binascii.hexlify(signed_message)))
 
